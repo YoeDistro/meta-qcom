@@ -238,12 +238,93 @@ jobs:
 
       - name: Publish Test Job Details
         run: |
-          for json_file in $(find ${{ github.workspace }} -name "test-job-*.json")
+          INPUT=$(for TESTJOB in $(find ${{ github.workspace }} -name "test-job-*.json")
           do
-              DEVICE_TYPE=$(cat "$json_file" | jq -r ".requested_device_type")
-              URL=$(cat "$json_file" | jq -r ".url")
-              JOB_ID=$(cat "$json_file" | jq -r ".id")
-              JOB_TITLE=$(cat "$json_file"| jq -r ".description")
-              echo " * [Job $JOB_ID on $DEVICE_TYPE]($URL) - ${JOB_TITLE}"
-              echo " * [Job $JOB_ID on $DEVICE_TYPE]($URL) - ${JOB_TITLE}" >> $GITHUB_STEP_SUMMARY
+              JOB_ID=$(cat "${TESTJOB}" | jq ".id")
+              JOB_URL="https://lava.infra.foundries.io/results/$JOB_ID"
+              JOB_DETAILS=$(curl -s "https://lava.infra.foundries.io/api/v0.2/jobs/$JOB_ID/")
+              JOB_HEALTH=$(echo "$JOB_DETAILS" | jq -r ".health")
+              JOB_STATE=$(echo "$JOB_DETAILS" | jq -r ".state")
+              JOB_DEVICE_TYPE=$(echo "$JOB_DETAILS" | jq -r ".requested_device_type")
+              if [ "${JOB_STATE}" = "Finished" ] && [ ${JOB_HEALTH} = "Complete" ]; then
+                  # get suites and results
+                  JOB_SUITES=$(curl -s "https://lava.infra.foundries.io/api/v0.2/jobs/$JOB_ID/suites/")
+                  TEST_RESULTS=$(for SUITE in $(echo "$JOB_SUITES" | jq -r -c ".results[]")
+                  do
+                      SUITE_NAME=$(echo "$SUITE" | jq -r ".name")
+                      SUITE_ID=$(echo "$SUITE" | jq -r ".id")
+                      SUITE_TESTS=$(curl -s "https://lava.infra.foundries.io/api/v0.2/jobs/$JOB_ID/suites/$SUITE_ID/tests/")
+                      if [ "$SUITE_NAME" != "lava" ]; then
+                          TEST_NAME=$(echo "$SUITE_TESTS" | jq -r -c ".results[] | .name")
+                          TEST_RESULT=$(echo "$SUITE_TESTS" | jq -r -c ".results[] | .result")
+                          TEST_URL="${JOB_URL}"
+                          TEST_RESULT_OBJ=$(jq --arg url "$TEST_URL" --arg result "$TEST_RESULT" -n -c '$ARGS.named')
+                          if [ -n "$TEST_NAME" ]; then
+                              jq -n -c --arg key "$TEST_NAME" --argjson value "$TEST_RESULT_OBJ" '$ARGS.named'
+                          fi
+                      else
+                          TEST_NAME="boot"
+                          TEST_URL="${JOB_URL}"
+                          TEST_RESULT_OBJ=$(jq --arg url "$TEST_URL" --arg result "pass" -n -c '$ARGS.named')
+                          jq -n -c --arg key "$TEST_NAME" --argjson value "$TEST_RESULT_OBJ" '$ARGS.named'
+                      fi
+                  done | jq -s -c --sort-keys 'from_entries')
+              fi
+              echo "{\"key\": \"$JOB_DEVICE_TYPE\", \"value\": $TEST_RESULTS}" | jq
+          # combine entries from boot jobs and pre-merge jobs
+          done | jq -s -c 'reduce .[] as $i ({}; .[$i.key] = ((.[$i.key] // {}) + $i.value))')
+          echo "$INPUT"
+          DEVICES=$(echo "$INPUT" | jq -r 'keys[]' | sort)
+
+          RESULTS=$(echo "$INPUT" | jq -r '.[] | keys[]?' | sort -u)
+
+          # Print header row
+          printf "| %s |" "Test"
+          printf "| %s |" "Test" >> $GITHUB_STEP_SUMMARY
+          for D in $DEVICES; do
+            printf " %s |" "$D"
+            printf " %s |" "$D" >> $GITHUB_STEP_SUMMARY
+          done
+          echo
+          echo >> $GITHUB_STEP_SUMMARY
+
+          ## Print separator
+          printf "| ---- |"
+          printf "| ---- |" >> $GITHUB_STEP_SUMMARY
+          for _ in $DEVICES; do
+            printf " ---- |"
+            printf " ---- |" >> $GITHUB_STEP_SUMMARY
+          done
+          echo
+          echo >> $GITHUB_STEP_SUMMARY
+
+          for R in $RESULTS; do
+            printf "| %s |" "$R"
+            printf "| %s |" "$R" >> $GITHUB_STEP_SUMMARY
+
+            for D in $DEVICES; do
+              VALUE=$(echo "$INPUT" | jq -r --arg d "$D" --arg r "$R" '.[$d][$r].result // ""')
+              URL=$(echo "$INPUT" | jq -r --arg d "$D" --arg r "$R" '.[$d][$r].url // ""')
+              CHECKMARK=":white_check_mark:"
+              if [ "${VALUE}" = "fail" ]; then CHECKMARK=":x:"; fi
+              if [ "${VALUE}" = "skip" ]; then CHECKMARK=":warning:"; fi
+              if [ -z "${VALUE}" ]; then CHECKMARK=":no_entry_sign:"; fi
+              printf " %s [%s](%s) |" "$CHECKMARK" "$VALUE" "$URL"
+              printf " %s [%s](%s) |" "$CHECKMARK" "$VALUE" "$URL" >> $GITHUB_STEP_SUMMARY
+            done
+            echo >> $GITHUB_STEP_SUMMARY
+          done
+          echo "### All jobs summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Job ID | Device | State | Health |" >> $GITHUB_STEP_SUMMARY
+          echo "| ---- | ---- | ---- | ---- |" >> $GITHUB_STEP_SUMMARY
+          for TESTJOB in $(find ${{ github.workspace }} -name "test-job-*.json")
+          do
+              JOB_ID=$(cat "${TESTJOB}" | jq ".id")
+              JOB_URL="https://lava.infra.foundries.io/results/$JOB_ID"
+              JOB_DETAILS=$(curl -s "https://lava.infra.foundries.io/api/v0.2/jobs/$JOB_ID/")
+              JOB_HEALTH=$(echo "$JOB_DETAILS" | jq -r ".health")
+              JOB_STATE=$(echo "$JOB_DETAILS" | jq -r ".state")
+              JOB_DEVICE_TYPE=$(echo "$JOB_DETAILS" | jq -r ".requested_device_type")
+              echo "| [$JOB_ID]($JOB_URL) | $JOB_DEVICE_TYPE | $JOB_STATE | $JOB_HEALTH |" >> $GITHUB_STEP_SUMMARY
           done
