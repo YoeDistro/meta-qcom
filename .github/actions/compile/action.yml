@@ -67,14 +67,14 @@ runs:
           fi
         fi
 
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v6
       with:
         name: buildchart-${{ inputs.distro_name }}${{ inputs.kernel_dirname }}-${{ inputs.machine }}
         path: |
           buildchart.svg
           buildchart-world.svg
 
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v6
       with:
         name: kas-build-${{ inputs.distro_name }}${{ inputs.kernel_dirname }}-${{ inputs.machine }}
         path: kas-build.yml
@@ -118,7 +118,7 @@ runs:
         echo "${{ steps.upload_artifacts.outputs.url }}" > "${FILENAME}"
         echo "filename=${FILENAME}" >> $GITHUB_OUTPUT
     - name: Upload build URL
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         overwrite: true
         name: ${{ steps.print-output.outputs.filename }}
