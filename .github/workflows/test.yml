@@ -6,6 +6,10 @@ on:
       build_id:
         required: true
         type: string
+    outputs:
+      summary_id:
+        description: "ID of the test summary artifact"
+        value: ${{ jobs.publish-test-summary.outputs.summary_id }}
 
 jobs:
   prepare-boot-jobs:
