@@ -63,11 +63,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: 'Download job templates'
-        uses: actions/download-artifact@v7
-        with:
-          pattern: boottest-*
-
       - name: "List jobs"
         id: listjobs
         uses: ./.github/actions/list-jobs
@@ -193,10 +188,6 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: 'Download job templates'
-        uses: actions/download-artifact@v7
-        with:
-          pattern: premerge-*
 
       - name: "List jobs"
         id: listjobs
