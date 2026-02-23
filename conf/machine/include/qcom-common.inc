@@ -1,5 +1,4 @@
 require conf/machine/include/soc-family.inc
-require conf/machine/include/fit-dtb-compatible.inc
 MACHINEOVERRIDES =. "qcom:"
 
 # Set a default set of MACHINE_FEATURES, indivudual MACHINEs can append it

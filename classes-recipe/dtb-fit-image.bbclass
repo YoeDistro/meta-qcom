@@ -7,6 +7,7 @@
 inherit kernel-arch
 
 require conf/image-fitimage.conf
+require conf/machine/include/fit-dtb-compatible.inc
 
 DEPENDS += "\
     u-boot-tools-native \
