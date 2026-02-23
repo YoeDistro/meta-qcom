@@ -31,20 +31,18 @@ DEPENDS += "glib-2.0 fastrpc protobuf-camx libxml2"
 COMPATIBLE_MACHINE = "^$"
 COMPATIBLE_MACHINE:aarch64 = "(.*)"
 
-# Prebuilt binaries: skip configure/compile
-do_configure[noexec] = "1"
-do_compile[noexec] = "1"
-
 do_install() {
     install -d ${D}${libdir}
-    install -d ${D}${bindir}
     install -d ${D}${datadir}/doc/${BPN}
     install -d ${D}${datadir}/doc/camx-${PLATFORM}
     install -d ${D}${datadir}/doc/chicdk-${PLATFORM}
 
     cp -r ${S}/usr/lib/* ${D}${libdir}
-    cp -r ${S}/usr/bin/* ${D}${bindir}
-
+    # Install bin files only if /usr/bin exists in ${S}
+    if [ -d "${S}${bindir}" ]; then
+        install -d ${D}${bindir}
+        cp -r ${S}/usr/bin/* ${D}${bindir}
+    fi
     # Remove unnecessary development symlinks (.so) from the staged image
     rm -f ${D}${libdir}/camx/${PLATFORM}/*${SOLIBSDEV}
     rm -f ${D}${libdir}/camx/${PLATFORM}/camera/components/*${SOLIBSDEV}
@@ -63,11 +61,13 @@ do_install() {
     install -m 0644 ${S}/usr/share/doc/${BPN}/LICENSE.QCOM-2.txt \
         ${D}${datadir}/doc/camx-${PLATFORM}
 
-    # chicdk docs
-    install -m 0644 ${S}/usr/share/doc/chicdk-${PLATFORM}/NOTICE \
-        ${D}${datadir}/doc/chicdk-${PLATFORM}
-    install -m 0644 ${S}/usr/share/doc/${BPN}/LICENSE.QCOM-2.txt \
-        ${D}${datadir}/doc/chicdk-${PLATFORM}
+    # install chicdk docs only if /usr/share/doc/chicdk-${PLATFORM} exists in ${S}
+    if [ -d "${S}/usr/share/doc/chicdk-${PLATFORM}" ]; then
+        install -m 0644 ${S}/usr/share/doc/chicdk-${PLATFORM}/NOTICE \
+            ${D}${datadir}/doc/chicdk-${PLATFORM}
+        install -m 0644 ${S}/usr/share/doc/${BPN}/LICENSE.QCOM-2.txt \
+            ${D}${datadir}/doc/chicdk-${PLATFORM}
+    fi
 }
 
 
@@ -91,7 +91,7 @@ FILES:chicdk-${PLATFORM} = "\
     ${libdir}/camx/${PLATFORM}/libcommonchiutils*${SOLIBS} \
     ${libdir}/camx/${PLATFORM}/libiccprofile*${SOLIBS} \
     ${libdir}/camx/${PLATFORM}/com.qti.chiusecaseselector*${SOLIBS} \
-    ${libdir}/camx/${PLATFORM}/camera/components/com.qti.node*${SOLIBS} \
+    ${libdir}/camx/${PLATFORM}/camera/components/com.qti*${SOLIBS} \
     ${libdir}/camx/${PLATFORM}/camera/com.qti.sensormodule*${SOLIBS} \
     ${libdir}/camx/${PLATFORM}/camera/*.bin \
     ${libdir}/camx/${PLATFORM}/camera/com.qti.sensor*${SOLIBS} \
@@ -103,13 +103,14 @@ FILES:${PN} = "\
     ${libdir}/libcamera_metadata_${PLATFORM}*${SOLIBS} \
     ${libdir}/camx/${PLATFORM}/*${SOLIBS} \
     ${libdir}/camx/${PLATFORM}/camera/components/com.qti.node.swregistration*${SOLIBS} \
-    ${libdir}/camx/${PLATFORM}/hw/*${SOLIBS} \
     ${libdir}/camx/${PLATFORM}/camera/components/*${SOLIBS} \
 "
 
 FILES:${PN}-dev = "\
     ${libdir}/*${SOLIBSDEV} \
 "
+
+FILES:${PN}-staticdev = "${libdir}/camx/${PLATFORM}/*.a"
 
 # Preserve ${PN} naming to avoid ambiguity in package identification.
 DEBIAN_NOAUTONAME:${PN} = "1"
