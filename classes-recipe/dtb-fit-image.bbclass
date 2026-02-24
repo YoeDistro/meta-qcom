@@ -7,6 +7,7 @@
 inherit kernel-arch
 
 require conf/image-fitimage.conf
+require conf/machine/include/fit-dtb-compatible.inc
 
 DEPENDS += "\
     u-boot-tools-native \
@@ -113,3 +114,15 @@ python do_generate_qcom_fitimage_setscene () {
 addtask do_generate_qcom_fitimage_setscene
 
 do_generate_qcom_fitimage[stamp-extra-info] = "${MACHINE_ARCH}"
+
+# Serialize FIT_DTB_COMPATIBLE for cache invalidation on changes
+python __anonymous() {
+    compat_flags = d.getVarFlags('FIT_DTB_COMPATIBLE') or {}
+    compat_lines = []
+    for k in sorted(compat_flags.keys()):
+        v = " ".join((compat_flags[k] or "").split())
+        compat_lines.append(f"{k}={v}")
+    d.setVar('FIT_DTB_COMPATIBLE_SIG', "\n".join(compat_lines))
+}
+
+do_generate_qcom_fitimage[vardeps] += "FIT_DTB_COMPATIBLE_SIG"
