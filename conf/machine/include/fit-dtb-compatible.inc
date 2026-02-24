@@ -53,6 +53,8 @@ FIT_DTB_COMPATIBLE[qcs6490-rb3gen2+qcs6490-rb3gen2-vision-mezzanine] = " \
     qcom,qcs6490-iot-subtype2 \
 "
 FIT_DTB_COMPATIBLE[qcs6490-rb3gen2+qcs6490-rb3gen2-vision-mezzanine-camx] = " \
+    qcom,qcs5430-iot-camx \
+    qcom,qcs5430-iot-subtype2-camx \
     qcom,qcs6490-iot-camx \
     qcom,qcs6490-iot-subtype2-camx \
 "
