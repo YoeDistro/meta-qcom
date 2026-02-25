@@ -195,11 +195,13 @@ Please make sure to visit go/GitHubBasicsDoc and go/OSSBestPractices before prop
 
 ## Maintainer(s)
 
-* Naveen Kumar <quic_kumarn@quicinc.com>
-* Sourabh Banerjee <quic_sbanerje@quicinc.com>
-* Viswanath Kraleti <vkraleti@oss.qualcomm.com>
-* Ricardo Salveti <ricardo.salveti@oss.qualcomm.com>
+* Anuj Mittal <anuj.mittal@oss.qualcomm.com>
+* Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+* Koen Kooi <koen.kooi@oss.qualcomm.com>
 * Nicolas Dechesne <nicolas.dechesne@oss.qualcomm.com>
+* Ricardo Salveti <ricardo.salveti@oss.qualcomm.com>
+* Sourabh Banerjee <sbanerje@qti.qualcomm.com>
+* Viswanath Kraleti <viswanath.kraleti@oss.qualcomm.com>
 
 ## License
 
