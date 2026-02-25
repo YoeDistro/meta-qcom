@@ -68,7 +68,7 @@ jobs:
         uses: ./.github/actions/list-jobs
         with:
           prefix: "boottest"
-          build_id: ${{ inputs.build_id }}
+          build_id: ${{ github.run_id }}
           gh_token: ${{ secrets.GITHUB_TOKEN }}
 
   submit-boot-job:
@@ -194,7 +194,7 @@ jobs:
         uses: ./.github/actions/list-jobs
         with:
           prefix: "premerge"
-          build_id: ${{ inputs.build_id }}
+          build_id: ${{ github.run_id }}
           gh_token: ${{ secrets.GITHUB_TOKEN }}
 
   submit-premerge-job:
