@@ -30,7 +30,7 @@ runs:
           persist-credentials: false
           repository: qualcomm-linux/lava-test-plans
           path: lava-test-plans
-          ref: d5b19bcc4d038a40849fe3de0847d4277d5c1305
+          ref: 3544131df5c2df3ac1c7250393d28e60f72e41b0
 
       - uses: actions/setup-python@v6
         with:
