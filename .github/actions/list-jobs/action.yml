@@ -34,7 +34,10 @@ runs:
       id: listjobs
       shell: bash
       run: |
-        JOBFILES=$(find . -name "${{ inputs.prefix }}*.yaml")
+        # This is intentionally left not using inputs.prefix.
+        # Fixing the typo breaks the action
+        # Full refactoring is on the way. Please leave it like this for now.
+        JOBFILES=$(find . -name "*.yaml")
         RESULT_JSON=$(jq -n '{target: []}')
         for J in $JOBFILES
           do
