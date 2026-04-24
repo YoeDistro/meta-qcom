@@ -81,7 +81,10 @@ jobs:
           ls -R $GITHUB_WORKSPACE
 
       - name: Submit ${{ matrix.target.name }}
-        timeout-minutes: 20
+        # Set timeout to 2h. The timeout starts when the job is submitted
+        # It may spend some time in LAVA queue as there is a limited number
+        # of devices
+        timeout-minutes: 120
         id: submit
         uses: foundriesio/lava-action@v12
         with:
@@ -196,7 +199,10 @@ jobs:
           artifact-ids: ${{ needs.prepare-premerge-jobs.outputs.artifact_id }}
 
       - name: Submit ${{ matrix.target.name }}
-        timeout-minutes: 20
+        # Set timeout to 2h. The timeout starts when the job is submitted
+        # It may spend some time in LAVA queue as there is a limited number
+        # of devices
+        timeout-minutes: 120
         uses: foundriesio/lava-action@v12
         with:
           lava_token: ${{ secrets.LAVATOKEN }}
