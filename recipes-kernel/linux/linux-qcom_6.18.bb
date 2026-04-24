@@ -14,8 +14,8 @@ PV = "${LINUX_VERSION}"
 
 FILESEXTRAPATHS:prepend := "${THISDIR}/linux-qcom-6.18:"
 
-# tag:qcom-6.18.y-20260419
-SRCREV ?= "2f43e5abac7c92e736109e693fd376fa033fe1ef"
+# tag:qcom-6.18.y-20260424
+SRCREV ?= "79ab61f25c649832e8005b1a3344d2b078ad0256"
 
 SRCBRANCH ?= "nobranch=1"
 SRCBRANCH:class-devupstream ?= "branch=qcom-6.18.y"
@@ -23,7 +23,6 @@ SRCBRANCH:class-devupstream ?= "branch=qcom-6.18.y"
 SRC_URI = " \
     git://github.com/qualcomm-linux/kernel.git;${SRCBRANCH};protocol=https \
     file://0001-tools-use-basename-to-identify-file-in-gen-mach-type.patch \
-    file://0001-misc-fastrpc-possible-double-free-of-cctx-remote_hea.patch \
 "
 
 # Additional kernel configs.
