@@ -172,10 +172,14 @@ RRECOMMENDS:${PN}-qcom-qcs6490-soc += " \
     kernel-module-dispcc-sc7280 \
     kernel-module-gpucc-sc7280 \
     kernel-module-lpassaudiocc-sc7280 \
+    kernel-module-lpasscc-sc8280xp \
+    kernel-module-lpasscorecc-sc7280 \
     kernel-module-pinctrl-sc7280-lpass-lpi \
     kernel-module-pmic-glink \
     kernel-module-pmic-glink-altmode \
     kernel-module-pwrseq-qcom-wcn \
+    kernel-module-snd-soc-lpass-sc7280 \
+    kernel-module-snd-soc-sc7280 \
     kernel-module-snd-soc-wsa883x \
     kernel-module-videocc-sc7280 \
 "
