@@ -141,7 +141,15 @@ RRECOMMENDS:${PN}-qcom-qcm2290-soc += " \
     ${PN}-qcom-generic \
     kernel-module-ath10k-snoc \
     kernel-module-dispcc-qcm2290 \
+    kernel-module-dwc3-qcom \
     kernel-module-gpucc-qcm2290 \
+    kernel-module-q6adm \
+    kernel-module-q6afe \
+    kernel-module-q6afe-clocks \
+    kernel-module-q6asm \
+    kernel-module-q6core \
+    kernel-module-qcom-pm8008 \
+    kernel-module-qcom-pm8008-regulator \
 "
 
 RRECOMMENDS:${PN}-qcom-qcs615-soc += " \
