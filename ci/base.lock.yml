@@ -5,7 +5,7 @@ overrides:
         oe-core:
             commit: 8c008f36d7af1e63cb3f4a2ba763efd1f1e5fe4d
         bitbake:
-            commit: 5d722b5d65e4eef7befe6376983385421e993f86
+            commit: a2dd9be788274d9c7280be5b1be5eb5c3990cf54
         meta-arm:
             commit: d987a5945802dcbbc06be91a0d34f00431ea840e
         meta-openembedded:
