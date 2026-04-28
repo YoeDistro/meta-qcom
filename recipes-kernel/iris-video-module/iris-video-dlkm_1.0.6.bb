@@ -8,7 +8,7 @@ SRC_URI = " \
     file://blacklist-video.conf.venus \
     file://blacklist-video.conf.vidc \
 "
-SRCREV  = "4e5e930893ba95e6684b69fcad8db33999fd2412"
+SRCREV  = "3892363b2e5c72ed04c82eb2935832f015da8ada"
 
 inherit module update-alternatives
 
