@@ -57,6 +57,7 @@ do_install() {
     install -d ${D}${datadir}/qcom/qcs615/Qualcomm/QCS615-RIDE/dsp/cdsp
     install -d ${D}${datadir}/qcom/qcm6490/Thundercomm/RB3gen2/dsp/cdsp
     install -d ${D}${datadir}/qcom/sa8775p/Qualcomm/SA8775P-RIDE/dsp/cdsp
+    install -d ${D}${datadir}/qcom/sa8775p/Qualcomm/SA8775P-RIDE/dsp/cdsp1
     install -d ${D}${datadir}/qcom/qcs8300/Qualcomm/QCS8300-RIDE/dsp/cdsp
     install -d ${D}${bindir}
 
@@ -70,6 +71,11 @@ do_install() {
     cp -r ${S}/lib/hexagon-v68/unsigned/* ${D}${datadir}/qcom/qcm6490/Thundercomm/RB3gen2/dsp/cdsp
     cp -r ${S}/lib/hexagon-v73/unsigned/* ${D}${datadir}/qcom/sa8775p/Qualcomm/SA8775P-RIDE/dsp/cdsp
     cp -r ${S}/lib/hexagon-v75/unsigned/* ${D}${datadir}/qcom/qcs8300/Qualcomm/QCS8300-RIDE/dsp/cdsp
+
+    for lib in ${D}${datadir}/qcom/sa8775p/Qualcomm/SA8775P-RIDE/dsp/cdsp/*; do \
+        ln -s ../cdsp/$(basename $lib) \
+        ${D}${datadir}/qcom/sa8775p/Qualcomm/SA8775P-RIDE/dsp/cdsp1/$(basename $lib); \
+    done
 
     cp -r ${S}/bin/${PLATFORM_DIR}/* ${D}${bindir}
 }
@@ -112,6 +118,7 @@ PACKAGES += "\
 FILES:${PN}-hexagon-v66 += "${datadir}/qcom/qcs615/Qualcomm/QCS615-RIDE/dsp/cdsp"
 FILES:${PN}-hexagon-v68 += "${datadir}/qcom/qcm6490/Thundercomm/RB3gen2/dsp/cdsp"
 FILES:${PN}-hexagon-v73 += "${datadir}/qcom/sa8775p/Qualcomm/SA8775P-RIDE/dsp/cdsp"
+FILES:${PN}-hexagon-v73 += "${datadir}/qcom/sa8775p/Qualcomm/SA8775P-RIDE/dsp/cdsp1"
 FILES:${PN}-hexagon-v75 += "${datadir}/qcom/qcs8300/Qualcomm/QCS8300-RIDE/dsp/cdsp"
 
 RDEPENDS:${PN} += "fastrpc"
@@ -128,3 +135,6 @@ INSANE_SKIP:${PN}-hexagon-v66 += "arch libdir ldflags file-rdeps"
 INSANE_SKIP:${PN}-hexagon-v68 += "arch libdir ldflags file-rdeps"
 INSANE_SKIP:${PN}-hexagon-v73 += "arch libdir ldflags file-rdeps"
 INSANE_SKIP:${PN}-hexagon-v75 += "arch libdir ldflags file-rdeps"
+
+# Hexagon libraries include .so symlinks but are runtime artifacts.
+INSANE_SKIP:${PN}-hexagon-v73 += "dev-so"
