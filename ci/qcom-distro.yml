@@ -7,12 +7,11 @@ distro: qcom-distro
 
 defaults:
   repos:
-    branch: master
+    branch: wrynose
 
 repos:
   meta-qcom-distro:
     url: https://github.com/qualcomm-linux/meta-qcom-distro
-    branch: main
 
   meta-openembedded:
     url: https://github.com/openembedded/meta-openembedded
@@ -27,9 +26,11 @@ repos:
 
   meta-virtualization:
     url: https://git.yoctoproject.org/git/meta-virtualization
+    branch: master
 
   meta-audioreach:
     url: https://github.com/AudioReach/meta-audioreach
+    branch: master
 
   meta-selinux:
     url: https://git.yoctoproject.org/meta-selinux
@@ -39,6 +40,7 @@ repos:
 
   meta-security:
     url: https://git.yoctoproject.org/meta-security
+    branch: master
     layers:
       .:
       meta-tpm:
