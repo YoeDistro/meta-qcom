@@ -11,7 +11,6 @@ PACKAGES = " \
 "
 
 RDEPENDS:${PN}-boot-essential = " \
-    pd-mapper \
     qrtr \
     rmtfs \
     tqftpserv \
