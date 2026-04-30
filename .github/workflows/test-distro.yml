@@ -98,7 +98,7 @@ jobs:
           save_job_details: true
           result_file_name: "${{ matrix.target.result_file }}"
           test_job_file_name_prefix: "${{ inputs.distro_name }}${{ inputs.distro_suffix }}-"
-      - uses: mwasilew/github-action-matrix-outputs-write@v2
+      - uses: qualcomm-linux/github-action-matrix-outputs-write@v3
         if: always()
         id: out
         with:
