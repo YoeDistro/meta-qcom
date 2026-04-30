@@ -141,7 +141,15 @@ RRECOMMENDS:${PN}-qcom-qcm2290-soc += " \
     ${PN}-qcom-generic \
     kernel-module-ath10k-snoc \
     kernel-module-dispcc-qcm2290 \
+    kernel-module-dwc3-qcom \
     kernel-module-gpucc-qcm2290 \
+    kernel-module-q6adm \
+    kernel-module-q6afe \
+    kernel-module-q6afe-clocks \
+    kernel-module-q6asm \
+    kernel-module-q6core \
+    kernel-module-qcom-pm8008 \
+    kernel-module-qcom-pm8008-regulator \
 "
 
 RRECOMMENDS:${PN}-qcom-qcs615-soc += " \
@@ -164,10 +172,14 @@ RRECOMMENDS:${PN}-qcom-qcs6490-soc += " \
     kernel-module-dispcc-sc7280 \
     kernel-module-gpucc-sc7280 \
     kernel-module-lpassaudiocc-sc7280 \
+    kernel-module-lpasscc-sc8280xp \
+    kernel-module-lpasscorecc-sc7280 \
     kernel-module-pinctrl-sc7280-lpass-lpi \
     kernel-module-pmic-glink \
     kernel-module-pmic-glink-altmode \
     kernel-module-pwrseq-qcom-wcn \
+    kernel-module-snd-soc-lpass-sc7280 \
+    kernel-module-snd-soc-sc7280 \
     kernel-module-snd-soc-wsa883x \
     kernel-module-videocc-sc7280 \
 "
