@@ -19,3 +19,4 @@ jobs:
         uses: korthout/backport-action@7c3f6cd5843cac11bc59a04a1b7699af93261670 # 4.5.0
         with:
           label_pattern: "^backport (wrynose)$"
+          branch_name: "backport/${pull_number}-to-${target_branch}"
