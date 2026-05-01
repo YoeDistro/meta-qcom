@@ -5,12 +5,13 @@ DEPENDS += "bc-native dtc-native gnutls-native python3-pyelftools-native qtestsi
 
 COMPATIBLE_MACHINE:aarch64 = "(qcom)"
 
-PV = "2026.01+2026.04-rc1+git"
+PV = "2026.04+2026.07-rc1+git"
 
-SRCREV = "7b9fb537f19db0fa48b824ecc883c9c8512f0e21"
+SRCREV = "7a82a69bc2e56bdf0df04378b2b6902f995790a6"
 SRCBRANCH = "nobranch=1"
 
 SRC_URI = "git://github.com/qualcomm-linux/u-boot.git;${SRCBRANCH};protocol=https;name=uboot"
+SRC_URI += "file://disable-eficapsule-tool.cfg"
 
 python __anonymous() {
     ubootconfig = (d.getVar('UBOOT_CONFIG') or "").split()
